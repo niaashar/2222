@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кабинет специалиста — ABA_pro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="dashboard-owner.html" class="logo">
+                <img src="images/Лого.png" alt="ABA_pro" class="logo-img">
+                <span class="logo-text">ABA_pro</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="dashboard-owner.html" class="nav-link">Кабинет</a></li>
+                <li><a href="index.html" class="nav-link">Сайт</a></li>
+                <li><a href="#" onclick="logout()" class="nav-link">🚪 Выход</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section style="padding: 120px 20px 50px; background: #FAF8F5; min-height: 100vh;">
+        <div class="container">
+            <h1 style="font-size: 2.5rem; margin-bottom: 10px;">🧩 Кабинет специалиста</h1>
+            <p style="color: #718096; margin-bottom: 30px;">Слесь Ирина Анатольевна | owner@aba-pro.ru</p>
+            
+            <!-- ВКЛАДКИ -->
+            <div style="display: flex; gap: 10px; margin-bottom: 30px; border-bottom: 2px solid #E8D5B7; padding-bottom: 10px;">
+                <button onclick="showTab('clients')" id="tab-clients" style="padding: 10px 20px; cursor: pointer; background: #9FB8C4; color: white; border: none; border-radius: 8px 8px 0 0; font-weight: 600;">👥 Клиенты</button>
+                <button onclick="showTab('meetings')" id="tab-meetings" style="padding: 10px 20px; cursor: pointer; background: transparent; color: #718096; border: none; border-radius: 8px 8px 0 0; font-weight: 600;">📅 Встречи</button>
+                <button onclick="showTab('documents')" id="tab-documents" style="padding: 10px 20px; cursor: pointer; background: transparent; color: #718096; border: none; border-radius: 8px 8px 0 0; font-weight: 600;">📄 Документы</button>
+                <button onclick="showTab('templates')" id="tab-templates" style="padding: 10px 20px; cursor: pointer; background: transparent; color: #718096; border: none; border-radius: 8px 8px 0 0; font-weight: 600;">✉️ Шаблоны</button>
+            </div>
+
+            <!-- ВКЛАДКА КЛИЕНТЫ -->
+            <div id="clients-tab">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="margin: 0;">Мои клиенты</h2>
+                    <button onclick="openModal('addClientModal')" style="background: #9FB8C4; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem;">+ Добавить клиента</button>
+                </div>
+                <div id="clientsList">
+                    <p style="color: #718096; text-align: center; padding: 40px;">Загрузка...</p>
+                </div>
+            </div>
+
+            <!-- ВКЛАДКА ВСТРЕЧИ -->
+            <div id="meetings-tab" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="margin: 0;">Тематические встречи</h2>
+                    <button onclick="openModal('addMeetingModal')" style="background: #9FB8C4; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem;">+ Создать встречу</button>
+                </div>
+                <div id="meetingsList">
+                    <p style="color: #718096; text-align: center; padding: 40px;">Загрузка...</p>
+                </div>
+            </div>
+
+            <!-- ВКЛАДКА ДОКУМЕНТЫ -->
+            <div id="documents-tab" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="margin: 0;">📄 Документы клиентов</h2>
+                    <button onclick="openModal('uploadDocumentModal')" style="background: #9FB8C4; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">📤 Загрузить документ</button>
+                </div>
+                <div id="documentsList">
+                    <p style="color: #718096; text-align: center; padding: 40px;">Пока нет документов</p>
+                </div>
+            </div>
+
+            <!-- ВКЛАДКА ШАБЛОНЫ -->
+            <div id="templates-tab" style="display: none;">
+                <h2>✉️ Шаблоны писем</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; margin-top: 20px;">
+                    <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                        <h3 style="margin-top: 0;">1️⃣ После первичного контакта</h3>
+                        <textarea style="width: 100%; min-height: 200px; padding: 10px; border: 1px solid #E8D5B7; border-radius: 8px; margin: 10px 0;" id="template1">Здравствуйте,
+
+Спасибо за ваше обращение и доверие.
+Я внимательно ознакомлюсь с вашим запросом и свяжусь с вами в ближайшее время.
+
+С уважением,
+[Ваше имя]
+
+Пазлы начинают собираться 🧩</textarea>
+                        <button onclick="copyTemplate('template1')" style="background: transparent; border: 2px solid #E8D5B7; padding: 8px 16px; border-radius: 6px; cursor: pointer;">📋 Копировать</button>
+                    </div>
+                    <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                        <h3 style="margin-top: 0;">2️⃣ Итоги встречи</h3>
+                        <textarea style="width: 100%; min-height: 200px; padding: 10px; border: 1px solid #E8D5B7; border-radius: 8px; margin: 10px 0;" id="template2">Здравствуйте,
+
+Подводя итог нашей работы на этом этапе:
+— мы прояснили запрос,
+— обозначили ключевые направления,
+— наметили возможные дальнейшие шаги.
+
+На данный момент этап завершён.
+
+С уважением,
+[Ваше имя]</textarea>
+                        <button onclick="copyTemplate('template2')" style="background: transparent; border: 2px solid #E8D5B7; padding: 8px 16px; border-radius: 6px; cursor: pointer;">📋 Копировать</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- МОДАЛЬНОЕ ОКНО: ДОБАВИТЬ КЛИЕНТА -->
+    <div id="addClientModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000;">
+        <div style="background: white; padding: 30px; border-radius: 12px; max-width: 600px; margin: 80px auto; position: relative;">
+            <span onclick="closeModal('addClientModal')" style="position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer;">&times;</span>
+            <h2 style="margin-bottom: 20px;">Добавить клиента</h2>
+            <form id="addClientForm" onsubmit="addClient(event)">
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Имя клиента *</label>
+                    <input type="text" id="clientName" required placeholder="Иванова Мария" style="width: 100%; padding: 10px; border: 2px solid #E8D5B7; border-radius: 8px;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Email *</label>
+                    <input type="email" id="clientEmail" required placeholder="email@example.com" style="width: 100%; padding: 10px; border: 2px solid #E8D5B7; border-radius: 8px;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Телефон</label>
+                    <input type="tel" id="clientPhone" placeholder="+7 (999) 999-99-99" style="width: 100%; padding: 10px; border: 2px solid #E8D5B7; border-radius: 8px;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Статус</label>
+                    <select id="clientStatus" style="width: 100%; padding: 10px; border: 2px solid #E8D5B7; border-radius: 8px;">
+                        <option value="new">🆕 Новый</option>
+                        <option value="consultation">💬 Консультация</option>
+                        <option value="program">📋 Программа</option>
+                        <option value="support">🤝 Сопровождение</option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">📝 Комментарии</label>
+                    <textarea id="clientComments" rows="3" placeholder="Заметки о клиенте..." style="width: 100%; padding: 10px; border: 2px solid #E8D5B7; border-radius: 8px;"></textarea>
+                </div>
+                <button type="submit" style="width: 100%; background: #9FB8C4; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1.1rem;">✅ Добавить клиента</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО: СОЗДАТЬ ВСТРЕЧУ -->
+    <div id="addMeetingModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000;">
+        <div style="background: white; padding: 30px; border-radius: 12px; max-width: 600px; margin: 80px auto; position: relative;">
+            <span onclick="closeModal('addMeetingModal')" style="position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer;">&times;</span>
+            <h2 style="margin-bottom: 20px;">📅 Создать встречу</h2>
+            <form id="addMeetingForm" onsubmit="addMeeting(event)">
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Тема встречи *</label>
+                    <input type="text" id="meetingTitle" required placeholder="Поведение как коммуникация" style="width: 100%; padding: 10px; border: 2px solid #E8D5B7; border-radius: 8px;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Дата *</label>
+                    <input type="date" id="meetingDate" required style="width: 100%; padding: 10px; border: 2px solid #E8D5B7; border-radius: 8px;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Время *</label>
+                    <input type="time" id="meetingTime" required style="width: 100%; padding: 10px; border: 2px solid #E8D5B7; border-radius: 8px;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Описание</label>
+                    <textarea id="meetingDesc" rows="3" placeholder="Описание встречи..." style="width: 100%; padding: 10px; border: 2px solid #E8D5B7; border-radius: 8px;"></textarea>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Ссылка на Zoom/Skype</label>
+                    <input type="url" id="meetingLink" placeholder="https://zoom.us/j/..." style="width: 100%; padding: 10px; border: 2px solid #E8D5B7; border-radius: 8px;">
+                </div>
+                <button type="submit" style="width: 100%; background: #9FB8C4; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1.1rem;">✅ Создать встречу</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО: ЗАГРУЗИТЬ ДОКУМЕНТ -->
+    <div id="uploadDocumentModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000;">
+        <div style="background: white; padding: 30px; border-radius: 12px; max-width: 600px; margin: 80px auto; position: relative;">
+            <span onclick="closeModal('uploadDocumentModal')" style="position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer;">&times;</span>
+            <h2 style="margin-bottom: 20px;">📤 Загрузить документ</h2>
+            <form id="uploadDocumentForm" onsubmit="uploadDocument(event)">
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Название документа *</label>
+                    <input type="text" id="docName" required placeholder="Информированное согласие" style="width: 100%; padding: 10px; border: 2px solid #E8D5B7; border-radius: 8px;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Выберите клиента *</label>
+                    <select id="docClient" required style="width: 100%; padding: 10px; border: 2px solid #E8D5B7; border-radius: 8px;">
+                        <option value="">-- Выберите клиента --</option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Тип документа</label>
+                    <select id="docType" style="width: 100%; padding: 10px; border: 2px solid #E8D5B7; border-radius: 8px;">
+                        <option value="consent">📋 Информированное согласие</option>
+                        <option value="contract">📄 Договор</option>
+                        <option value="program">📝 Программа</option>
+                        <option value="other">📎 Другое</option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Файл *</label>
+                    <input type="file" id="docFile" required accept=".pdf,.doc,.docx,.jpg,.png" style="width: 100%; padding: 10px; border: 2px solid #E8D5B7; border-radius: 8px;">
+                </div>
+                <button type="submit" style="width: 100%; background: #9FB8C4; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1.1rem;">📤 Загрузить</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    // ===== ПРОВЕРКА АВТОРИЗАЦИИ =====
+    const currentUser = JSON.parse(localStorage.getItem('aba_user'));
+    if (!currentUser || currentUser.role !== 'owner') {
+        window.location.href = 'login.html';
+    }
+
+    // ===== ИНИЦИАЛИЗАЦИЯ =====
+    if (!localStorage.getItem('aba_users')) {
+        localStorage.setItem('aba_users', JSON.stringify([]));
+    }
+    if (!localStorage.getItem('aba_meetings')) {
+        localStorage.setItem('aba_meetings', JSON.stringify([]));
+    }
+    if (!localStorage.getItem('aba_documents')) {
+        localStorage.setItem('aba_documents', JSON.stringify([]));
+    }
+
+    // ===== ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК =====
+    function showTab(tabName) {
+        document.getElementById('clients-tab').style.display = tabName === 'clients' ? 'block' : 'none';
+        document.getElementById('meetings-tab').style.display = tabName === 'meetings' ? 'block' : 'none';
+        document.getElementById('documents-tab').style.display = tabName === 'documents' ? 'block' : 'none';
+        document.getElementById('templates-tab').style.display = tabName === 'templates' ? 'block' : 'none';
+        
+        ['clients', 'meetings', 'documents', 'templates'].forEach(tab => {
+            document.getElementById('tab-' + tab).style.background = tab === tabName ? '#9FB8C4' : 'transparent';
+            document.getElementById('tab-' + tab).style.color = tab === tabName ? 'white' : '#718096';
+        });
+        
+        if (tabName === 'clients') loadClients();
+        if (tabName === 'meetings') loadMeetings();
+        if (tabName === 'documents') loadDocuments();
+    }
+
+    // ===== МОДАЛЬНЫЕ ОКНА =====
+    function openModal(id) {
+        document.getElementById(id).style.display = 'block';
+        if (id === 'uploadDocumentModal') loadClientsToSelect();
+    }
+    
+    function closeModal(id) {
+        document.getElementById(id).style.display = 'none';
+        if (id === 'addClientForm' || id === 'addMeetingForm' || id === 'uploadDocumentForm') {
+            document.getElementById(id).reset();
+        }
+    }
+
+    // ===== КЛИЕНТЫ =====
+    function addClient(event) {
+        event.preventDefault();
+        
+        const newClient = {
+            id: 'client' + Date.now(),
+            name: document.getElementById('clientName').value,
+            email: document.getElementById('clientEmail').value,
+            phone: document.getElementById('clientPhone').value,
+            status: document.getElementById('clientStatus').value,
+            comments: document.getElementById('clientComments').value,
+            role: 'client',
+            registeredAt: new Date().toISOString()
+        };
+        
+        const users = JSON.parse(localStorage.getItem('aba_users'));
+        users.push(newClient);
+        localStorage.setItem('aba_users', JSON.stringify(users));
+        
+        closeModal('addClientModal');
+        loadClients();
+        document.getElementById('addClientForm').reset();
+        alert('✅ Клиент "' + newClient.name + '" успешно добавлен!');
+    }
+
+    function loadClients() {
+        const users = JSON.parse(localStorage.getItem('aba_users'));
+        const clients = users.filter(u => u.role === 'client');
+        const container = document.getElementById('clientsList');
+        
+        if (clients.length === 0) {
+            container.innerHTML = '<p style="color: #718096; text-align: center; padding: 40px;">Пока нет клиентов</p>';
+            return;
+        }
+        
+        container.innerHTML = clients.map(client => {
+            let statusBg = '#F0E8D8';
+            let statusText = '🆕 Новый';
+            if (client.status === 'consultation') { statusBg = '#C4D4DC'; statusText = '💬 Консультация'; }
+            else if (client.status === 'program') { statusBg = '#D4E8DC'; statusText = '📋 Программа'; }
+            else if (client.status === 'support') { statusBg = '#D8D4E8'; statusText = '🤝 Сопровождение'; }
+            
+            return `
+                <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                    <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 15px;">
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0 0 10px 0;">${client.name}</h3>
+                            <p style="color: #718096; margin: 5px 0;">📧 ${client.email}</p>
+                            ${client.phone ? `<p style="color: #718096; margin: 5px 0;">📱 ${client.phone}</p>` : ''}
+                            ${client.comments ? `<div style="margin-top: 15px; padding: 12px; background: #F0E8D8; border-radius: 8px; border-left: 4px solid #9FB8C4;"><strong style="color: #4A5568; display: block; margin-bottom: 5px;">📝 Комментарии:</strong><p style="color: #4A5568; margin: 0; white-space: pre-wrap; line-height: 1.6;">${client.comments}</p></div>` : ''}
+                        </div>
+                        <span style="padding: 8px 16px; border-radius: 20px; font-size: 0.9rem; font-weight: 600; background: ${statusBg};">${statusText}</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // ===== ВСТРЕЧИ =====
+    function addMeeting(event) {
+        event.preventDefault();
+        
+        const newMeeting = {
+            id: 'meeting' + Date.now(),
+            title: document.getElementById('meetingTitle').value,
+            date: document.getElementById('meetingDate').value,
+            time: document.getElementById('meetingTime').value,
+            description: document.getElementById('meetingDesc').value,
+            link: document.getElementById('meetingLink').value,
+            createdAt: new Date().toISOString()
+        };
+        
+        const meetings = JSON.parse(localStorage.getItem('aba_meetings'));
+        meetings.push(newMeeting);
+        localStorage.setItem('aba_meetings', JSON.stringify(meetings));
+        
+        closeModal('addMeetingModal');
+        loadMeetings();
+        document.getElementById('addMeetingForm').reset();
+        alert('✅ Встреча "' + newMeeting.title + '" успешно создана!');
+    }
+
+    function loadMeetings() {
+        const meetings = JSON.parse(localStorage.getItem('aba_meetings'));
+        const container = document.getElementById('meetingsList');
+        
+        if (meetings.length === 0) {
+            container.innerHTML = '<p style="color: #718096; text-align: center; padding: 40px;">Пока нет встреч</p>';
+            return;
+        }
+        
+        container.innerHTML = meetings.map(meeting => `
+            <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                <h3 style="margin: 0 0 10px 0;">${meeting.title}</h3>
+                <p style="color: #718096; margin: 5px 0;">📅 ${meeting.date} | ⏰ ${meeting.time}</p>
+                ${meeting.description ? `<p style="margin: 10px 0;">${meeting.description}</p>` : ''}
+                ${meeting.link ? `<a href="${meeting.link}" target="_blank" style="display: inline-block; background: #9FB8C4; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; margin-top: 10px;">🔗 Подключиться</a>` : ''}
+            </div>
+        `).join('');
+    }
+
+    // ===== ДОКУМЕНТЫ =====
+    function loadClientsToSelect() {
+        const users = JSON.parse(localStorage.getItem('aba_users'));
+        const clients = users.filter(u => u.role === 'client');
+        const select = document.getElementById('docClient');
+        
+        select.innerHTML = '<option value="">-- Выберите клиента --</option>';
+        clients.forEach(client => {
+            const option = document.createElement('option');
+            option.value = client.id;
+            option.textContent = client.name;
+            select.appendChild(option);
+        });
+    }
+
+    function uploadDocument(event) {
+        event.preventDefault();
+        
+        const fileInput = document.getElementById('docFile');
+        const file = fileInput.files[0];
+        
+        if (!file) {
+            alert('❌ Выберите файл');
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const newDocument = {
+                id: 'doc' + Date.now(),
+                name: document.getElementById('docName').value,
+                clientId: document.getElementById('docClient').value,
+                type: document.getElementById('docType').value,
+                fileName: file.name,
+                fileData: e.target.result,
+                uploadedAt: new Date().toISOString()
+            };
+            
+            const documents = JSON.parse(localStorage.getItem('aba_documents'));
+            documents.push(newDocument);
+            localStorage.setItem('aba_documents', JSON.stringify(documents));
+            
+            closeModal('uploadDocumentModal');
+            loadDocuments();
+            document.getElementById('uploadDocumentForm').reset();
+            alert('✅ Документ загружен!');
+        };
+        
+        reader.readAsDataURL(file);
+    }
+
+    function loadDocuments() {
+        const documents = JSON.parse(localStorage.getItem('aba_documents'));
+        const users = JSON.parse(localStorage.getItem('aba_users'));
+        const container = document.getElementById('documentsList');
+        
+        if (documents.length === 0) {
+            container.innerHTML = '<p style="color: #718096; text-align: center; padding: 40px;">Пока нет документов</p>';
+            return;
+        }
+        
+        const clientsDocs = {};
+        documents.forEach(doc => {
+            if (!clientsDocs[doc.clientId]) clientsDocs[doc.clientId] = [];
+            clientsDocs[doc.clientId].push(doc);
+        });
+        
+        let html = '';
+        Object.keys(clientsDocs).forEach(clientId => {
+            const client = users.find(u => u.id === clientId);
+            const clientName = client ? client.name : 'Неизвестный клиент';
+            
+            html += `<div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px;"><h3 style="margin-top: 0;">👤 ${clientName}</h3>`;
+            
+            clientsDocs[clientId].forEach(doc => {
+                html += `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #FAF8F5; border-radius: 8px; margin-bottom: 10px;">
+                        <div>
+                            <div style="font-weight: 600;">📄 ${doc.name}</div>
+                            <div style="font-size: 0.85rem; color: #718096;">📅 ${new Date(doc.uploadedAt).toLocaleDateString('ru')}</div>
+                        </div>
+                        <a href="${doc.fileData}" download="${doc.fileName}" style="background: #9FB8C4; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 600;">⬇️ Скачать</a>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+        });
+        
+        container.innerHTML = html;
+    }
+
+    // ===== ШАБЛОНЫ =====
+    function copyTemplate(id) {
+        const textarea = document.getElementById(id);
+        textarea.select();
+        document.execCommand('copy');
+        alert('✅ Шаблон скопирован!');
+    }
+
+    // ===== ВЫХОД =====
+    function logout() {
+        localStorage.removeItem('aba_user');
+        window.location.href = 'login.html';
+    }
+
+    // Закрытие модалки при клике вне
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = 'none';
+        }
+    }
+
+    // Загрузка при старте
+    loadClients();
+    // ===== ЗАГРУЗКА ДОКУМЕНТОВ =====
+
+// Инициализация
+if (!localStorage.getItem('aba_documents')) {
+    localStorage.setItem('aba_documents', JSON.stringify([]));
+}
+
+// Открытие модального окна загрузки
+function openUploadModal() {
+    loadClientsToSelect();
+    document.getElementById('uploadDocumentModal').style.display = 'block';
+}
+
+// Закрытие модального окна
+function closeUploadModal() {
+    document.getElementById('uploadDocumentModal').style.display = 'none';
+    document.getElementById('uploadDocumentForm').reset();
+}
+
+// Загрузка клиентов в select
+function loadClientsToSelect() {
+    const users = JSON.parse(localStorage.getItem('aba_users'));
+    const clients = users.filter(u => u.role === 'client');
+    const select = document.getElementById('docClient');
+    
+    if (!select) {
+        console.error('❌ Select #docClient не найден!');
+        return;
+    }
+    
+    select.innerHTML = '<option value="">-- Выберите клиента --</option>';
+    
+    clients.forEach(client => {
+        const option = document.createElement('option');
+        option.value = client.id;
+        option.textContent = client.name;
+        select.appendChild(option);
+    });
+    
+    console.log('✅ Загружено клиентов:', clients.length);
+}
+
+// Обработка формы загрузки документа
+document.getElementById('uploadDocumentForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('docName').value;
+    const clientId = document.getElementById('docClient').value;
+    const type = document.getElementById('docType').value;
+    const fileInput = document.getElementById('docFile');
+    const file = fileInput.files[0];
+    
+    console.log('📄 Загрузка документа:', { name, clientId, type, file });
+    
+    if (!file) {
+        alert('❌ Выберите файл для загрузки');
+        return;
+    }
+    
+    // Проверка размера (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+        alert('❌ Файл слишком большой. Максимум 5MB');
+        return;
+    }
+    
+    // Чтение файла
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const newDocument = {
+            id: 'doc' + Date.now(),
+            name: name,
+            clientId: clientId,
+            type: type,
+            fileName: file.name,
+            fileData: e.target.result, // Base64
+            uploadedAt: new Date().toISOString(),
+            uploadedBy: currentUser.name
+        };
+        
+        const documents = JSON.parse(localStorage.getItem('aba_documents'));
+        documents.push(newDocument);
+        localStorage.setItem('aba_documents', JSON.stringify(documents));
+        
+        console.log('✅ Документ сохранен:', newDocument);
+        
+        closeUploadModal();
+        loadDocuments();
+        alert('✅ Документ "' + name + '" успешно загружен!');
+    };
+    
+    reader.onerror = function() {
+        alert('❌ Ошибка чтения файла');
+    };
+    
+    reader.readAsDataURL(file);
+});
+
+// Загрузка списка документов
+function loadDocuments() {
+    const documents = JSON.parse(localStorage.getItem('aba_documents'));
+    const users = JSON.parse(localStorage.getItem('aba_users'));
+    const container = document.getElementById('documentsList');
+    
+    console.log('📄 Загрузка документов. Всего:', documents.length);
+    
+    if (!container) {
+        console.error('❌ Контейнер #documentsList не найден!');
+        return;
+    }
+    
+    if (documents.length === 0) {
+        container.innerHTML = '<p style="color: #718096; text-align: center; padding: 40px;">Пока нет загруженных документов</p>';
+        return;
+    }
+    
+    // Группируем по клиентам
+    const clientsDocs = {};
+    documents.forEach(doc => {
+        if (!clientsDocs[doc.clientId]) {
+            clientsDocs[doc.clientId] = [];
+        }
+        clientsDocs[doc.clientId].push(doc);
+    });
+    
+    let html = '';
+    
+    Object.keys(clientsDocs).forEach(clientId => {
+        const client = users.find(u => u.id === clientId);
+        const clientName = client ? client.name : 'Неизвестный клиент';
+        
+        html += `
+            <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                <h3 style="margin-top: 0; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #E8D5B7;">👤 ${clientName}</h3>
+                <div style="display: grid; gap: 10px;">
+        `;
+        
+        clientsDocs[clientId].forEach(doc => {
+            const typeIcons = {
+                'consent': '📋',
+                'contract': '📄',
+                'program': '📝',
+                'report': '📊',
+                'other': '📎'
+            };
+            
+            const typeNames = {
+                'consent': 'Информированное согласие',
+                'contract': 'Договор',
+                'program': 'Программа',
+                'report': 'Отчёт',
+                'other': 'Другое'
+            };
+            
+            html += `
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #FAF8F5; border-radius: 8px;">
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; margin-bottom: 4px;">${typeIcons[doc.type] || '📄'} ${doc.name}</div>
+                        <div style="font-size: 0.85rem; color: #718096;">
+                            ${typeNames[doc.type] || 'Документ'} | 📅 ${new Date(doc.uploadedAt).toLocaleDateString('ru')}
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <a href="${doc.fileData}" download="${doc.fileName}" style="background: #9FB8C4; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 600;">⬇️ Скачать</a>
+                        <button onclick="deleteDocument('${doc.id}')" style="background: #D4A494; color: white; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">🗑️</button>
+                    </div>
+                </div>
+            `;
+        });
+        
+        html += '</div></div>';
+    });
+    
+    container.innerHTML = html;
+}
+
+// Удаление документа
+function deleteDocument(docId) {
+    if (confirm('Вы уверены, что хотите удалить этот документ?')) {
+        const documents = JSON.parse(localStorage.getItem('aba_documents'));
+        const filtered = documents.filter(d => d.id !== docId);
+        localStorage.setItem('aba_documents', JSON.stringify(filtered));
+        loadDocuments();
+        alert('✅ Документ удалён');
+    }
+}
+
+// Загрузка документов при старте
+loadDocuments();
+// ===== ОТПРАВКА СООБЩЕНИЙ КЛИЕНТАМ =====
+
+function openSendMessageModal(clientId, clientName) {
+    const modal = document.createElement('div');
+    modal.id = 'sendMessageModal';
+    modal.className = 'modal';
+    modal.style.cssText = 'display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000;';
+    modal.innerHTML = `
+        <div style="background: white; padding: 30px; border-radius: 12px; max-width: 600px; margin: 100px auto; position: relative;">
+            <span onclick="closeSendMessageModal()" style="position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer;">&times;</span>
+            <h2 style="margin-bottom: 20px;">✉️ Отправить сообщение</h2>
+            <p style="color: #718096; margin-bottom: 20px;">Клиент: <strong>${clientName}</strong></p>
+            <form id="sendMessageForm">
+                <input type="hidden" id="messageClientId" value="${clientId}">
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Тема</label>
+                    <input type="text" id="messageSubject" required placeholder="Тема сообщения" style="width: 100%; padding: 10px; border: 2px solid #E8D5B7; border-radius: 8px;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Сообщение</label>
+                    <textarea id="messageText" rows="5" required placeholder="Текст сообщения..." style="width: 100%; padding: 10px; border: 2px solid #E8D5B7; border-radius: 8px;"></textarea>
+                </div>
+                <button type="submit" style="width: 100%; background: #9FB8C4; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">📨 Отправить</button>
+            </form>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    modal.style.display = 'block';
+    
+    document.getElementById('sendMessageForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const newMessage = {
+            id: 'msg' + Date.now(),
+            clientId: document.getElementById('messageClientId').value,
+            subject: document.getElementById('messageSubject').value,
+            text: document.getElementById('messageText').value,
+            from: 'owner',
+            fromName: currentUser.name,
+            sentAt: new Date().toISOString(),
+            read: false
+        };
+        
+        const messages = JSON.parse(localStorage.getItem('aba_messages') || '[]');
+        messages.push(newMessage);
+        localStorage.setItem('aba_messages', JSON.stringify(messages));
+        
+        closeSendMessageModal();
+        alert('✅ Сообщение отправлено!');
+    });
+}
+
+function closeSendMessageModal() {
+    const modal = document.getElementById('sendMessageModal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+// ===== ЗАГРУЗКА ДОКУМЕНТОВ ДЛЯ КЛИЕНТОВ =====
+
+function loadClientsToSelect() {
+    const users = JSON.parse(localStorage.getItem('aba_users'));
+    const clients = users.filter(u => u.role === 'client');
+    const select = document.getElementById('docClient');
+    
+    if (!select) return;
+    
+    select.innerHTML = '<option value="">-- Выберите клиента --</option>';
+    
+    clients.forEach(client => {
+        const option = document.createElement('option');
+        option.value = client.id;
+        option.textContent = client.name;
+        select.appendChild(option);
+    });
+}
+
+function uploadDocument(event) {
+    event.preventDefault();
+    
+    const fileInput = document.getElementById('docFile');
+    const file = fileInput.files[0];
+    
+    if (!file) {
+        alert('❌ Выберите файл');
+        return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const newDocument = {
+            id: 'doc' + Date.now(),
+            name: document.getElementById('docName').value,
+            clientId: document.getElementById('docClient').value,
+            type: document.getElementById('docType').value,
+            fileName: file.name,
+            fileData: e.target.result,
+            uploadedAt: new Date().toISOString(),
+            uploadedBy: currentUser.name
+        };
+        
+        const documents = JSON.parse(localStorage.getItem('aba_documents') || '[]');
+        documents.push(newDocument);
+        localStorage.setItem('aba_documents', JSON.stringify(documents));
+        
+        closeUploadModal();
+        loadDocuments();
+        alert('✅ Документ загружен для клиента!');
+    };
+    
+    reader.readAsDataURL(file);
+}
+
+function loadDocuments() {
+    const documents = JSON.parse(localStorage.getItem('aba_documents') || '[]');
+    const users = JSON.parse(localStorage.getItem('aba_users'));
+    const container = document.getElementById('documentsList');
+    
+    if (!container) return;
+    
+    if (documents.length === 0) {
+        container.innerHTML = '<p style="color: #718096; text-align: center; padding: 40px;">Пока нет загруженных документов</p>';
+        return;
+    }
+    
+    // Группируем по клиентам
+    const clientsDocs = {};
+    documents.forEach(doc => {
+        if (!clientsDocs[doc.clientId]) {
+            clientsDocs[doc.clientId] = [];
+        }
+        clientsDocs[doc.clientId].push(doc);
+    });
+    
+    let html = '';
+    
+    Object.keys(clientsDocs).forEach(clientId => {
+        const client = users.find(u => u.id === clientId);
+        const clientName = client ? client.name : 'Неизвестный клиент';
+        
+        html += `
+            <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                <h3 style="margin-top: 0; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #E8D5B7;">👤 ${clientName}</h3>
+                <div style="display: grid; gap: 10px;">
+        `;
+        
+        clientsDocs[clientId].forEach(doc => {
+            const typeIcons = {
+                'consent': '📋',
+                'contract': '📄',
+                'program': '📝',
+                'report': '📊',
+                'other': '📎'
+            };
+            
+            const typeNames = {
+                'consent': 'Информированное согласие',
+                'contract': 'Договор',
+                'program': 'Программа',
+                'report': 'Отчёт',
+                'other': 'Другое'
+            };
+            
+            html += `
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #FAF8F5; border-radius: 8px;">
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; margin-bottom: 4px;">${typeIcons[doc.type] || '📄'} ${doc.name}</div>
+                        <div style="font-size: 0.85rem; color: #718096;">
+                            ${typeNames[doc.type] || 'Документ'} | 📅 ${new Date(doc.uploadedAt).toLocaleDateString('ru')}
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <a href="${doc.fileData}" download="${doc.fileName}" style="background: #9FB8C4; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 600;">⬇️ Скачать</a>
+                        <button onclick="deleteDocument('${doc.id}')" style="background: #D4A494; color: white; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">🗑️</button>
+                    </div>
+                </div>
+            `;
+        });
+        
+        html += '</div></div>';
+    });
+    
+    container.innerHTML = html;
+}
+
+function deleteDocument(docId) {
+    if (confirm('Вы уверены, что хотите удалить этот документ?')) {
+        const documents = JSON.parse(localStorage.getItem('aba_documents') || '[]');
+        const filtered = documents.filter(d => d.id !== docId);
+        localStorage.setItem('aba_documents', JSON.stringify(filtered));
+        loadDocuments();
+        alert('✅ Документ удалён');
+    }
+}
+
+// ===== ОБНОВЛЁННАЯ ЗАГРУЗКА КЛИЕНТОВ С КНОПКАМИ =====
+
+function loadClients() {
+    const users = JSON.parse(localStorage.getItem('aba_users'));
+    const clients = users.filter(u => u.role === 'client');
+    const container = document.getElementById('clientsList');
+    
+    if (clients.length === 0) {
+        container.innerHTML = '<p style="color: #718096; text-align: center; padding: 40px;">Пока нет зарегистрированных клиентов</p>';
+        return;
+    }
+    
+    container.innerHTML = clients.map(client => {
+        let statusBg = '#F0E8D8';
+        let statusText = '🆕 Новый';
+        if (client.status === 'consultation') { statusBg = '#C4D4DC'; statusText = '💬 Консультация'; }
+        else if (client.status === 'program') { statusBg = '#D4E8DC'; statusText = '📋 Программа'; }
+        else if (client.status === 'support') { statusBg = '#D8D4E8'; statusText = '🤝 Сопровождение'; }
+        
+        return `
+            <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 15px;">
+                    <div style="flex: 1;">
+                        <h3 style="margin: 0 0 10px 0;">${client.name}</h3>
+                        <p style="color: #718096; margin: 5px 0;">📧 ${client.email}</p>
+                        ${client.phone ? `<p style="color: #718096; margin: 5px 0;">📱 ${client.phone}</p>` : ''}
+                        ${client.childInfo ? `<p style="color: #718096; margin: 5px 0;">🧒 ${client.childInfo}</p>` : ''}
+                        <p style="color: #718096; font-size: 0.85rem; margin: 10px 0;">📅 Регистрация: ${new Date(client.registeredAt).toLocaleDateString('ru')}</p>
+                        ${client.comments ? `<div style="margin-top: 15px; padding: 12px; background: #F0E8D8; border-radius: 8px; border-left: 4px solid #9FB8C4;"><strong style="color: #4A5568; display: block; margin-bottom: 5px;">📝 Комментарии:</strong><p style="color: #4A5568; margin: 0; white-space: pre-wrap; line-height: 1.6;">${client.comments}</p></div>` : ''}
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="display: inline-block; padding: 8px 16px; border-radius: 20px; font-size: 0.9rem; font-weight: 600; background: ${statusBg}; margin-bottom: 10px;">${statusText}</span>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end;">
+                            <button onclick="openSendMessageModal('${client.id}', '${client.name}')" style="background: #9FB8C4; color: white; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">✉️ Сообщение</button>
+                            <button onclick="changeClientStatus('${client.id}')" style="background: #B8D4C4; color: white; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">✏️ Статус</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function changeClientStatus(clientId) {
+    const newStatus = prompt('Введите новый статус:\n- new (Новый)\n- consultation (Консультация)\n- program (Программа)\n- support (Сопровождение)\n- completed (Завершён)', 'consultation');
+    
+    if (newStatus) {
+        const users = JSON.parse(localStorage.getItem('aba_users'));
+        const client = users.find(u => u.id === clientId);
+        if (client) {
+            client.status = newStatus;
+            localStorage.setItem('aba_users', JSON.stringify(users));
+            loadClients();
+            alert('✅ Статус обновлён!');
+        }
+    }
+}
+
+// Инициализация при загрузке
+if (!localStorage.getItem('aba_messages')) {
+    localStorage.setItem('aba_messages', JSON.stringify([]));
+}
+if (!localStorage.getItem('aba_documents')) {
+    localStorage.setItem('aba_documents', JSON.stringify([]));
+}
+    </script>
+    <!-- МОДАЛЬНОЕ ОКНО: ЗАГРУЗИТЬ ДОКУМЕНТ -->
+<div id="uploadDocumentModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000;">
+    <div style="background: white; padding: 30px; border-radius: 12px; max-width: 600px; margin: 80px auto; position: relative;">
+        <span onclick="closeUploadModal()" style="position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer;">&times;</span>
+        <h2 style="margin-bottom: 20px;">📤 Загрузить документ</h2>
+        <form id="uploadDocumentForm" onsubmit="uploadDocument(event)">
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Название документа *</label>
+                <input type="text" id="docName" required placeholder="Информированное согласие" style="width: 100%; padding: 10px; border: 2px solid #E8D5B7; border-radius: 8px;">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Выберите клиента *</label>
+                <select id="docClient" required style="width: 100%; padding: 10px; border: 2px solid #E8D5B7; border-radius: 8px;">
+                    <option value="">-- Выберите клиента --</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Тип документа</label>
+                <select id="docType" style="width: 100%; padding: 10px; border: 2px solid #E8D5B7; border-radius: 8px;">
+                    <option value="consent">📋 Информированное согласие</option>
+                    <option value="contract">📄 Договор</option>
+                    <option value="program">📝 Программа</option>
+                    <option value="report">📊 Отчёт</option>
+                    <option value="other">📎 Другое</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Файл *</label>
+                <input type="file" id="docFile" required accept=".pdf,.doc,.docx,.jpg,.png" style="width: 100%; padding: 10px; border: 2px solid #E8D5B7; border-radius: 8px;">
+            </div>
+            <button type="submit" style="width: 100%; background: #9FB8C4; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1.1rem;">📤 Загрузить</button>
+        </form>
+    </div>
+</div>
+
+<!-- Кнопка загрузки документов (добавьте рядом с кнопкой "Добавить клиента") -->
+<button onclick="openUploadModal()" style="background: #B8D4C4; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; margin-left: 10px;">📤 Загрузить документ</button>
+
+<script>
+function openUploadModal() {
+    loadClientsToSelect();
+    document.getElementById('uploadDocumentModal').style.display = 'block';
+}
+
+function closeUploadModal() {
+    document.getElementById('uploadDocumentModal').style.display = 'none';
+    document.getElementById('uploadDocumentForm').reset();
+}
+</script>
+</body>
+</html>
